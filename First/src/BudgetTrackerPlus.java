@@ -22,6 +22,7 @@ public class BudgetTrackerPlus {
         double entertainmentPercentage = (entertainment / income) * 100;
         double result = income - totalExpenses;
 
+        //Resumen total
         System.out.println("Your net profit each month is: $" + result);
         System.out.println("\n******Budget Summary******\n");
         System.out.println("The percentage of rent is: %" + rentPercentage);
