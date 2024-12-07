@@ -1,11 +1,12 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.awt.geom.RectangularShape;
 import javax.swing.*;
 
 public class TicTacToe {
     int boardWidth = 600;
-    int boardHeight = 600;
+    int boardHeight = 700;
 
     JFrame frame = new JFrame("Gato / Tic-Tac-Toe ESuances"); //Creamos la ventana o UI
     JLabel textLabel = new JLabel(); //Creamos el label del titulo del juego
@@ -18,7 +19,7 @@ public class TicTacToe {
     String currentPlayer = playerX; // Se declara el jugador inicial, este siendo X cuando empieza el programa
 
     boolean gameOver = false; //Se declara la variable inicial del juego.
-
+    int turns = 0; //Declaramos esta funcion para saber si hay un tie, si se llega a 9 y no hubo un game over, entonces ya tenemos un tie
 
     TicTacToe(){
         frame.setVisible(true); //Hacemos la ventana visible
@@ -60,6 +61,7 @@ public class TicTacToe {
                         JButton tile = (JButton) e.getSource(); //Se obtiene la fuente osea que boton es presionado
                         if (tile.getText() == "") { //Si el lugar actual esta vacio... esto para que no se pueda cambiar el resultado.
                             tile.setText(currentPlayer); //Se declara que es lo que se escribe en ese boton, en este caso el turno del jugador actual
+                            turns++;
                             checkWinnier(); //Cuando un jugador coloca una pieza, se checa si gano en ese momento.
                             if(!gameOver){ //Si el juego aun no se acaba... osea aun no hay ganador
                                 currentPlayer = currentPlayer == playerX ? playerO : playerX; // Ternerary para alternar entre turnos
@@ -74,13 +76,67 @@ public class TicTacToe {
     }
 
     void checkWinnier(){
-        //horizontal
+        //Horizontal
         for(int f = 0; f < 3; f++){ //Se checan las filas
             if (board[f][0].getText() == "") continue; //Si las filas no tienen nada, se continua
             if (board[f][0].getText() == board[f][1].getText() && board[f][1].getText() == board[f][2].getText()){ //Si en alguna de las filas, todas son X o O, se obtiene el ganador
+                for(int i = 0; i < 3; i++){
+                    setWinner(board[f][i]);
+                }
                 gameOver = true; //Se declara la variable de que se acabo el juego
                 return;
             }
         }
+
+        //Vertical
+        for(int c = 0; c < 3; c++){ //Se checan las columnas
+            if (board[0][c].getText() == "") continue; //Si las columnas no tienen nada, se continua
+            if (board[0][c].getText() == board[1][c].getText() && board[1][c].getText() == board[2][c].getText()){ //Si en alguna de las columnas, todas son X o O, se obtiene el ganador
+                for(int i = 0; i < 3; i++){
+                    setWinner(board[i][c]);
+                }
+                gameOver = true; //Se declara la variable de que se acabo el juego
+                return;
+            }
+        }
+
+        // Diagonal (L to R)
+        if(board[0][0].getText() == board[1][1].getText() && board[1][1].getText() == board[2][2].getText() && board[0][0].getText() != ""){
+            for (int i = 0; i < 3; i++){
+                setWinner(board[i][i]);
+            }
+            gameOver = true;
+            return;
+        }
+        // Diagonal (R to L)
+        if(board[0][2].getText() == board[1][1].getText() && board[1][1].getText() == board[2][0].getText() && board[0][2].getText() != ""){
+            setWinner(board[0][2]);
+            setWinner(board[1][1]);
+            setWinner(board[2][0]);
+            gameOver = true;
+            return;
+        }
+
+        if (turns == 9){
+            for (int f = 0; f < 3; f++){
+                for (int c = 0; c < 3; c++){
+                    setTie(board[f][c]);
+                }
+            }
+            gameOver = true;
+        }
+
+    }
+
+    void setWinner(JButton tile){ //Funcion para dar formato al ganador
+        tile.setForeground(Color.green); //Colocamos el color de la letra del ganador
+        tile.setBackground(Color.gray); //Colocamos el background color tambien a un gris mas claro
+        textLabel.setText(currentPlayer + " is the winner!"); //Declaramos el ganador mas un texto de que es el que gano
+    }
+
+    void setTie(JButton tile) {
+        tile.setForeground(Color.orange);
+        tile.setBackground(Color.gray);
+        textLabel.setText("TIE!");
     }
 }
