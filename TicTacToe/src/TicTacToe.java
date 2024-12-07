@@ -6,7 +6,7 @@ import javax.swing.*;
 
 public class TicTacToe {
     int boardWidth = 600;
-    int boardHeight = 700;
+    int boardHeight = 600;
 
     JFrame frame = new JFrame("Gato / Tic-Tac-Toe ESuances"); //Creamos la ventana o UI
     JLabel textLabel = new JLabel(); //Creamos el label del titulo del juego
